@@ -64,7 +64,7 @@ public class User implements UserDetails {
 
     public enum Role {
         USER(Set.of(
-                "joke:read" //Может читать шутки
+                "joke:read"
         )),
         MODERATOR(Set.of(
                 "joke:read",

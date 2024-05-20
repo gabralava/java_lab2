@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,15 +19,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(requests -> requests
-                        .requestMatchers("/jokes").permitAll() // Разрешение доступа к шуткам без авторизации
-                        .requestMatchers("/jokes/top").permitAll() 
-                        .requestMatchers("/jokes/random").permitAll()
-                        .requestMatchers("/jokes/{id}").permitAll()
-                        .requestMatchers("/register").permitAll() // Разрешение регистрации
-                        .anyRequest().authenticated() //  Все остальные запросы требуют авторизацию
-                )
-                .formLogin(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable); // Используем Basic Authentication
+            .authorizeRequests(requests -> requests
+                .requestMatchers("/jokes", "/jokes/top", "/jokes/random", "/jokes/{id}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/jokes").hasAuthority("joke:write")
+                .requestMatchers(HttpMethod.PUT, "/jokes/{id}").hasAnyAuthority("joke:update", "joke:delete")
+                .requestMatchers(HttpMethod.DELETE, "/jokes/{id}").hasAnyAuthority("joke:delete")
+                .requestMatchers("/users/**").hasAuthority("user:manage")
+                .anyRequest().authenticated()
+            )
+            .formLogin(Customizer.withDefaults())
+            .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

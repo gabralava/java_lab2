@@ -22,6 +22,7 @@ public class JokeTelegramBot extends TelegramLongPollingBot{
 
     final BotConfig config;
 
+    @SuppressWarnings("deprecation")
     public JokeTelegramBot(BotConfig config){
         this.config = config;
     }

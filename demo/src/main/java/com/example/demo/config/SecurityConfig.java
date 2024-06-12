@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeRequests(requests -> requests
-                .requestMatchers("/jokes", "/jokes/top", "/jokes/random", "/jokes/{id}").permitAll()
+                .requestMatchers("/jokes", "/jokes/top", "/jokes/random", "/jokes/{id}", "/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/jokes").hasAuthority("joke:write")
                 .requestMatchers(HttpMethod.PUT, "/jokes/{id}").hasAnyAuthority("joke:update", "joke:delete")
                 .requestMatchers(HttpMethod.DELETE, "/jokes/{id}").hasAnyAuthority("joke:delete")

@@ -21,28 +21,25 @@ public class UserService implements UserDetailsService{
 
     @Transactional
     public User registerUser(User user) {
-        // Проверка, существует ли уже пользователь с таким именем
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Пользователь с таким именем уже существует!");
         }
-    
-        // Хеширование пароля
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-    
-        // По умолчанию устанавливаем роль USER
         user.setRole(User.Role.USER);
     
-        // Сохранение пользователя в базу данных
         User savedUser = userRepository.save(user);
     
         return savedUser;
     }
+
     public User.Role getUserRole(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден!"));
         return user.getRole();
     }
 
+    @Transactional
     public void setUserRole(Long userId, User.Role newRole) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден!"));

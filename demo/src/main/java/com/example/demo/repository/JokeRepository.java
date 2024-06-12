@@ -1,13 +1,16 @@
 package com.example.demo.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.demo.model.JokeData;
 
 public interface JokeRepository extends JpaRepository<JokeData, Integer> {
-    @Query("SELECT j, count(c.id) as viewCount FROM jokes j JOIN JokeCall c ON j.id = c.joke.id GROUP BY j ORDER BY viewCount DESC")
-    Page<JokeData> findTopJokes(Pageable pageable);
+    @Query(value = "SELECT j.* FROM jokes j LEFT JOIN joke_calls c ON j.id = c.joke_id GROUP BY j.id ORDER BY COUNT(c.id) DESC LIMIT 5", nativeQuery = true)
+    List<JokeData> findTopJokes();
+
+    @Query(value = "SELECT * FROM jokes ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    JokeData findRandomJoke();
 }

@@ -3,11 +3,9 @@ package com.example.demo.controller;
 import java.util.List;
 
 import java.util.Optional;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,15 +42,13 @@ public class JokeController {
     }
 
     @GetMapping("/top")
-    public List<JokeData> getTopJokes() {
-        return jokeRepository.findTopJokes(PageRequest.of(0, 5)).getContent();
+    public ResponseEntity<List<JokeData>> getTopJokes() {
+        return new ResponseEntity<>(jokeRepository.findTopJokes(), HttpStatus.OK);
     }
 
     @GetMapping("/random")
-    public JokeData getRandomJoke() {
-        List<JokeData> jokes = jokeRepository.findAll();
-        Random rand = new Random();
-        return jokes.get(rand.nextInt(jokes.size()));
+    public ResponseEntity<JokeData> getRandomJoke() {
+        return new ResponseEntity<>(jokeRepository.findRandomJoke(), HttpStatus.OK);
     }
 
     @PostMapping

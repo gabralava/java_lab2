@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor //Генерируем конструктор с параметрами
-@NoArgsConstructor //Генерируем конструктор без параметров
-@Getter //Генерируем геттеры
-@Setter //Генерируем сеттеры
-@ToString //Отдельный метод для toString
-@Entity(name = "jokes") //Объявляем класс как сущность для работы с ним в БД и его имя
-@Table(name = "jokes") //Помечаем, как называется таблица в БД
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@Entity(name = "jokes")
+@Table(name = "jokes")
 @EqualsAndHashCode
 public class JokeData {
 
